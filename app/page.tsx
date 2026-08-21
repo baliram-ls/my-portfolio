@@ -60,6 +60,11 @@ export default function Home() {
             </a>
           </div>
         </div>
+        <img
+  src="/profile.jpg"
+  alt="Baliram Suryawanshi"
+  className="w-64 h-64 rounded-full object-cover border-4 border-cyan-400/30 shadow-2xl"
+/>
       </section>
 
       {/* About */}
