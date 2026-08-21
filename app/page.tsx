@@ -24,8 +24,8 @@ export default function Home() {
       </nav>
 
       {/* Hero */}
-      <section className="mx-auto flex min-h-[80vh] max-w-6xl items-center px-6 py-20">
-        <div className="max-w-3xl">
+     <section className="mx-auto flex w-full max-w-6xl flex-col items-center gap-6 px-4 py-10 md:min-h-screen md:gap-10 md:px-6 md:py-20">
+        <div className="w-full max-w-3xl">
           <p className="mb-4 text-cyan-400">
             Hello, I&apos;m
           </p>
@@ -63,7 +63,7 @@ export default function Home() {
         <img
   src="/profile.jpg"
   alt="Baliram Suryawanshi"
-  className="w-64 h-64 rounded-full object-cover border-4 border-cyan-400/30 shadow-2xl"
+  className="w-48 h-48 md:w-64 md:h-64 rounded-full object-cover border-4 border-cyan-400/50 shadow-2xl"
 />
       </section>
 
