@@ -1,346 +1,320 @@
-const projects = [
-  {
-    number: "01",
-    category: "AI · LEGALTECH",
-    name: "LegalMate AI",
-    description:
-      "An AI-powered legal information assistant that helps users explore legal topics through a conversational interface.",
-    stack: ["Python", "Flask", "Groq API"],
-    demo: "https://legalmate-ai-deploy.vercel.app/",
-    github: "https://github.com/baliram-ls/legalmate-ai",
-    mark: "L.",
-  },
-  {
-    number: "02",
-    category: "ANDROID · PRODUCTIVITY",
-    name: "AttendLock",
-    description:
-      "An attendance-tracking application designed to help students manage their timetable and understand their attendance.",
-    stack: ["Java", "Android", "XML"],
-    github: "https://github.com/baliram-ls/attendlock",
-    mark: "A.",
-  },
+"use client";
+
+import { useState } from "react";
+
+const LINKEDIN = "https://www.linkedin.com/"; // TODO: your LinkedIn URL
+const GITHUB = "https://github.com/"; // TODO: your GitHub URL
+const EMAIL = "suryawanshibaliram90@gmail.com";
+
+const Arrow = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M5 12h14M13 6l6 6-6 6" />
+  </svg>
+);
+const Ext = () => (
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M7 17L17 7M8 7h9v9" />
+  </svg>
+);
+const GitIcon = ({ s = 18 }: { s?: number }) => (
+  <svg width={s} height={s} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12 .5a12 12 0 00-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.9 1.300 1.9 1.300 1.100 1.900 2.900 1.300 3.600 1 .1-.8.4-1.300.8-1.600-2.700-.3-5.500-1.300-5.500-5.900 0-1.300.5-2.400 1.200-3.200-.1-.3-.5-1.500.1-3.200 0 0 1-.3 3.300 1.200a11.500 11.500 0 016 0C17.300 4.700 18.300 5 18.300 5c.7 1.700.2 2.900.1 3.200.8.800 1.200 1.900 1.200 3.200 0 4.600-2.800 5.600-5.500 5.900.4.400.8 1.100.8 2.200v3.300c0 .3.2.7.8.6A12 12 0 0012 .5z" />
+  </svg>
+);
+const InIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M4.98 3.5a2.5 2.5 0 11-.01 5 2.5 2.5 0 01.01-5zM3 9.75h4V21H3zM10 9.75h3.8v1.600h.1c.5-1 1.800-2 3.800-2 4 0 4.800 2.600 4.800 6V21h-4v-4.900c0-1.200 0-2.700-1.700-2.700s-1.900 1.300-1.900 2.600V21h-4z" />
+  </svg>
+);
+const MailIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="3" y="5" width="18" height="14" rx="2" />
+    <path d="M3 7l9 6 9-6" />
+  </svg>
+);
+const Icon = ({ d }: { d: string }) => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+    <path d={d} />
+  </svg>
+);
+
+const skills: { name: string; color: string; label: string }[] = [
+  { name: "Java", color: "#f89820", label: "J" },
+  { name: "Python", color: "#3776ab", label: "Py" },
+  { name: "C", color: "#5c8dbc", label: "C" },
+  { name: "Flask", color: "#e5e7eb", label: "F" },
+  { name: "REST APIs", color: "#94a3b8", label: "⚙" },
+  { name: "SQL", color: "#4f8ff7", label: "DB" },
+  { name: "HTML", color: "#e44d26", label: "5" },
+  { name: "CSS", color: "#2965f1", label: "3" },
+  { name: "JavaScript", color: "#f7df1e", label: "JS" },
+  { name: "Android", color: "#3ddc84", label: "A" },
+  { name: "Git", color: "#f05032", label: "◆" },
+  { name: "GitHub", color: "#e5e7eb", label: "GH" },
+  { name: "VS Code", color: "#23a9f2", label: "VS" },
+  { name: "Next.js", color: "#ffffff", label: "N" },
 ];
 
-const skills = [
-  "Java",
-  "Data Structures & Algorithms",
-  "REST APIs",
-  "SQL",
-  "Python",
-  "Flask",
-  "Git & GitHub",
-  "Android",
-  "Next.js",
-];
+const css = `
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+.pf{--bg:#050a14;--card:#0a1220;--line:rgba(120,150,200,.16);--blue:#1e90ff;--blue2:#27b3ff;--text:#f1f5f9;--mut:#9aa7ba;
+background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100vh;overflow-x:hidden;line-height:1.5}
+.pf a{color:inherit;text-decoration:none}
+.wrap{max-width:1000px;margin:0 auto;padding:0 20px}
+.hl{color:var(--blue2)}
+/* nav */
+.nav{position:sticky;top:0;z-index:50;background:rgba(5,10,20,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:56px}
+.logo{font-size:22px;font-weight:700;letter-spacing:-.5px}
+.logo span{color:var(--blue2)}
+.links{display:flex;gap:28px;font-size:13px;color:#c5cfdd}
+.links a{padding:18px 0;border-bottom:2px solid transparent}
+.links a:hover,.links a.act{color:var(--blue2);border-color:var(--blue2)}
+.btn{display:inline-flex;align-items:center;gap:8px;border-radius:9px;padding:11px 20px;font-size:13px;font-weight:600;cursor:pointer;border:1px solid var(--line);transition:.2s}
+.btn.pri{background:linear-gradient(90deg,#1e7bff,#27b3ff);border:0;color:#fff;box-shadow:0 6px 24px rgba(30,144,255,.28)}
+.btn.pri:hover{transform:translateY(-2px)}
+.btn.sec{background:rgba(255,255,255,.04)}
+.btn.sec:hover{border-color:var(--blue2)}
+.burger{display:none;background:none;border:1px solid var(--line);color:#fff;border-radius:8px;width:38px;height:38px;font-size:18px;cursor:pointer}
+.mnav{display:none}
+/* hero */
+.hero{position:relative;padding:42px 0 30px;background:radial-gradient(ellipse at 80% 40%,rgba(20,90,220,.35),transparent 55%)}
+.hero .wrap{position:relative;display:grid;grid-template-columns:1.1fr 1fr;gap:20px;align-items:center}
+.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:11.5px;color:#d3dbe8;margin-bottom:18px}
+.badge i{width:9px;height:9px;background:var(--blue);border-radius:50%}
+.hero h1{font-size:40px;line-height:1.1;font-weight:700;letter-spacing:-1px}
+.hero h1 .l{font-weight:300}
+.hero p.d{margin:20px 0 26px;color:var(--mut);font-size:14.5px;max-width:430px}
+.row{display:flex;flex-wrap:wrap;gap:12px}
+.soc{display:flex;flex-wrap:wrap;gap:22px;margin-top:22px;font-size:12.5px;color:#c5cfdd}
+.soc a{display:flex;align-items:center;gap:8px}
+.soc svg{color:var(--blue2)}
+.vis{position:relative;height:330px}
+.laptop{position:absolute;right:20px;top:40px;width:78%;height:210px;background:#0a0f1c;border:2px solid #1b2740;border-radius:10px 10px 4px 4px;transform:perspective(900px) rotateY(-14deg) rotateX(4deg);box-shadow:0 0 70px rgba(30,110,255,.45);padding:12px;overflow:hidden}
+.laptop:after{content:"";position:absolute;left:-6%;right:-6%;bottom:-14px;height:12px;background:#1a2438;border-radius:0 0 12px 12px}
+.laptop b{display:block;height:5px;border-radius:3px;margin-bottom:9px;background:#2d6cff;opacity:.8}
+.laptop b:nth-child(3n){background:#27b3ff;width:55%}.laptop b:nth-child(3n+1){width:75%;background:#7a5cff}.laptop b:nth-child(3n+2){width:40%;background:#35d6a0}
+.frame{position:absolute;right:0;top:0;width:120px;background:#080d18;border:1px solid var(--line);border-radius:8px;padding:14px;font-size:15px;line-height:1.3;color:#cbd5e1}
+.frame u{display:block;width:26px;height:3px;background:var(--blue);margin-top:8px;text-decoration:none}
+.books{position:absolute;left:0;bottom:30px;width:150px;font-size:12px;color:#aab6c8}
+.books div{background:#0c1424;border:1px solid var(--line);padding:6px 24px;margin-bottom:2px}
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);background:var(--card);border:1px solid var(--line);border-radius:14px;margin-top:6px}
+.stat{display:flex;align-items:center;gap:14px;padding:18px 20px;border-right:1px solid var(--line)}
+.stat:last-child{border:0}
+.ico{width:42px;height:42px;border-radius:50%;background:rgba(30,144,255,.12);display:grid;place-items:center;color:var(--blue2);flex:none}
+.stat b{display:block;font-size:14.5px}.stat small{color:var(--mut);font-size:12.5px}
+/* sections */
+section{padding:46px 0 10px;scroll-margin-top:60px}
+.eyebrow{font-size:11.5px;letter-spacing:2.2px;font-weight:600;color:var(--blue2);text-transform:uppercase;margin-bottom:14px}
+.about{display:grid;grid-template-columns:1fr 1.1fr;gap:34px;align-items:start}
+.about h2{font-size:32px;line-height:1.15;letter-spacing:-.5px;margin-bottom:20px}
+.about p{color:var(--mut);font-size:14px;margin-bottom:16px}
+.about p strong{color:#fff;font-weight:600}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+.card .ci{color:var(--blue2);margin-bottom:14px}
+.card h4{font-size:14.5px;margin-bottom:4px}
+.card p{font-size:13px;color:var(--mut);margin:0}
+/* projects */
+.ph{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.ph a{font-size:12.5px;color:var(--blue2);display:flex;gap:6px;align-items:center}
+.proj{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.pc{display:grid;grid-template-columns:1fr 1fr;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px}
+.tag{font-size:10.5px;letter-spacing:1.4px;color:#b8c3d4;margin-bottom:12px;display:flex;gap:10px;align-items:center}
+.tag span{border:1px solid var(--blue);color:var(--blue2);border-radius:5px;padding:2px 7px}
+.pc h3{font-size:24px;margin-bottom:10px}
+.pc p{font-size:13px;color:var(--mut);margin-bottom:16px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.chips span{background:#0f1a2e;border:1px solid var(--line);border-radius:8px;padding:6px 11px;font-size:11.5px;color:#d6deeb}
+.pc .btn{padding:10px 18px}
+.shot{background:#060b16;border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center;font-size:10px;color:var(--mut);align-self:start;min-height:200px}
+.shot h5{font-size:19px;color:#fff;margin:22px 0 2px}
+.shot .in{display:flex;margin:12px 0;background:#0c1424;border:1px solid var(--line);border-radius:6px;padding:6px;text-align:left}
+.shot .in i{margin-left:auto;background:var(--blue);width:18px;border-radius:4px}
+.shot .g{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.shot .g div{background:#0c1424;border:1px solid var(--line);border-radius:6px;padding:8px 4px;font-size:9px}
+.phone{border:3px solid var(--blue);border-radius:22px;padding:14px 10px;background:#060b16;text-align:center;align-self:start;font-size:10px;color:var(--mut)}
+.phone h5{color:var(--blue2);font-size:15px;font-weight:500;margin-bottom:10px}
+.phone .m{display:flex;justify-content:space-around;margin:12px 0}
+.phone .m b{color:#fff;font-size:15px;display:block}
+.phone .r{background:#0c1424;border-radius:6px;padding:7px;margin-top:6px;text-align:left}
+/* skills */
+.sk{display:flex;flex-wrap:wrap;gap:12px}
+.sk span{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 16px;font-size:13px}
+.sk em{font-style:normal;font-size:10.5px;font-weight:800;min-width:22px;height:22px;border-radius:5px;display:grid;place-items:center;background:rgba(255,255,255,.06)}
+/* contact */
+.contact{display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:center;border-top:1px solid var(--line);margin-top:40px;padding:36px 0}
+.contact h2{font-size:32px;line-height:1.15;margin:12px 0}
+.contact p{color:var(--mut);font-size:13.5px}
+.cl{display:flex;flex-direction:column;gap:10px;max-width:460px}
+.cl a{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;font-size:13px;font-weight:500}
+.cl a svg:first-child{color:var(--blue2)}
+.cl a svg:last-child{margin-left:auto}
+.cl a:hover{border-color:var(--blue2)}
+/* footer */
+footer{border-top:1px solid var(--line);padding:22px 0}
+footer .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--mut)}
+footer .f1{display:flex;align-items:center;gap:20px}
+footer nav{display:flex;gap:26px;align-items:center}
+.top{width:36px;height:36px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:#fff;cursor:pointer;display:grid;place-items:center}
+/* tablet */
+@media(max-width:900px){
+.proj{grid-template-columns:1fr}
+.about{grid-template-columns:1fr}
+}
+/* mobile */
+@media(max-width:720px){
+.links,.nav .btn{display:none}
+.burger{display:block}
+.mnav.open{display:flex;flex-direction:column;background:#070d1a;border-bottom:1px solid var(--line);padding:8px 20px 16px}
+.mnav a{padding:12px 0;font-size:14px;border-bottom:1px solid var(--line)}
+.hero{padding-top:28px}
+.hero .wrap{grid-template-columns:1fr}
+.hero h1{font-size:34px}
+.vis{height:250px;order:2}
+.laptop{width:86%;height:170px;top:30px;right:0}
+.frame{display:none}
+.books{display:none}
+.stats{grid-template-columns:1fr 1fr}
+.stat{padding:14px;border-right:0;border-bottom:1px solid var(--line)}
+.stat:nth-child(odd){border-right:1px solid var(--line)}
+.stat:nth-last-child(-n+2){border-bottom:0}
+.ico{width:36px;height:36px}
+.about h2,.contact h2{font-size:27px}
+.cards{grid-template-columns:1fr}
+.pc{grid-template-columns:1fr}
+.contact{grid-template-columns:1fr}
+.cl{max-width:none}
+footer .wrap{flex-direction:column;align-items:flex-start}
+}
+`;
 
-const linkStyle =
-  "inline-flex items-center gap-2 rounded-full border border-white/10 px-5 py-3 text-sm font-medium transition hover:border-sky-400/50 hover:bg-white/[0.05]";
+export default function Page() {
+  const [open, setOpen] = useState(false);
+  const nav = ["Home", "About", "Projects", "Skills", "Experience", "Contact"];
+  const id = (n: string) => (n === "Home" ? "home" : n.toLowerCase());
 
-export default function Home() {
   return (
-    <main className="min-h-screen overflow-hidden bg-[#090c11] text-[#f2f5fa]">
-      <header className="sticky top-0 z-20 border-b border-white/[0.07] bg-[#090c11]/90 backdrop-blur-xl">
-        <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
-          <a href="#home" className="text-xl font-semibold tracking-tight">
-            baliram<span className="text-sky-400">.</span>
-          </a>
-          <div className="hidden items-center gap-7 text-sm text-slate-400 sm:flex">
-            <a className="hover:text-white" href="#about">About</a>
-            <a className="hover:text-white" href="#projects">Projects</a>
-            <a className="hover:text-white" href="#skills">Skills</a>
-            <a className="hover:text-white" href="#contact">Contact</a>
-          </div>
-          <a
-            href="#contact"
-            className="rounded-full bg-white px-4 py-2.5 text-sm font-medium text-slate-950 transition hover:bg-sky-200"
-          >
-            Let's talk ↗
-          </a>
-        </nav>
+    <div className="pf" id="home">
+      <style>{css}</style>
+
+      {/* NAV */}
+      <header className="nav">
+        <div className="wrap">
+          <a className="logo" href="#home">baliram<span>.</span></a>
+          <nav className="links">
+            {nav.map((n, i) => (
+              <a key={n} href={`#${id(n)}`} className={i === 0 ? "act" : ""}>{n}</a>
+            ))}
+          </nav>
+          <a className="btn pri" href="#contact">Let&apos;s Talk <Arrow /></a>
+          <button className="burger" aria-label="Menu" onClick={() => setOpen(!open)}>{open ? "✕" : "☰"}</button>
+        </div>
+        <div className={`mnav ${open ? "open" : ""}`}>
+          {nav.map((n) => (
+            <a key={n} href={`#${id(n)}`} onClick={() => setOpen(false)}>{n}</a>
+          ))}
+        </div>
       </header>
 
-      <section
-        id="home"
-        className="mx-auto grid max-w-6xl items-center gap-12 px-6 py-24 md:grid-cols-[1.15fr_0.85fr] md:py-32"
-      >
-        <div>
-          <p className="mb-7 text-xs font-medium uppercase tracking-[0.22em] text-sky-400">
-            Computer Science · Bengaluru, India
-          </p>
-          <h1 className="max-w-2xl text-5xl font-semibold leading-[1.08] tracking-[-0.055em] sm:text-6xl lg:text-7xl">
-            Building useful software,
-            <span className="mt-2 block text-slate-500">
-              one problem at a time.
-            </span>
-          </h1>
-          <p className="mt-7 max-w-xl text-base leading-8 text-slate-400">
-            I'm Baliram Suryawanshi, a Computer Science Engineering student
-            interested in Java, backend development, APIs, and building
-            applications that solve real problems.
-          </p>
-          <div className="mt-9 flex flex-wrap gap-3">
-            <a
-              href="#projects"
-              className="rounded-full bg-sky-400 px-6 py-3.5 text-sm font-semibold text-slate-950 transition hover:bg-sky-300"
-            >
-              Explore my work ↗
-            </a>
-            <a
-              href="https://github.com/baliram-ls"
-              target="_blank"
-              rel="noreferrer"
-              className={linkStyle}
-            >
-              GitHub ↗
-            </a>
-          </div>
-          <p className="mt-7 text-sm text-slate-500">
-            B.E. Computer Science & Engineering · 5th semester
-          </p>
-        </div>
-
-        <div className="relative">
-          <div className="absolute -inset-8 rounded-full bg-sky-500/[0.08] blur-3xl" />
-          <div className="relative rounded-3xl border border-white/10 bg-[#0e141d] p-6 shadow-2xl sm:p-8">
-            <div className="flex items-center justify-between border-b border-white/[0.08] pb-5">
-              <span className="text-sm text-slate-400">A little about me</span>
-              <span className="h-2 w-2 rounded-full bg-emerald-400" />
-            </div>
-            <p className="mt-8 font-mono text-sm text-sky-400">
-              {"// Current direction"}
-            </p>
-            <p className="mt-3 text-2xl font-medium tracking-tight">
-              Java & problem solving
-            </p>
-            <p className="mt-3 leading-7 text-slate-400">
-              Learning the fundamentals, building projects, and getting better
-              at writing software every day.
-            </p>
-            <div className="mt-8 space-y-4">
-              {[
-                ["01", "Backend development"],
-                ["02", "APIs & databases"],
-                ["03", "Practical projects"],
-              ].map(([number, label]) => (
-                <div
-                  key={number}
-                  className="flex items-center gap-4 border-t border-white/[0.07] pt-4"
-                >
-                  <span className="font-mono text-xs text-sky-400">
-                    {number}
-                  </span>
-                  <span className="text-sm text-slate-300">{label}</span>
-                  <span className="ml-auto text-slate-600">↗</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-6xl px-6 pb-20">
-        <div className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.07] md:grid-cols-4">
-          {[
-            ["01", "Engineering student"],
-            ["02", "Featured projects"],
-            ["Java", "Primary language"],
-            ["Bengaluru", "Based in India"],
-          ].map(([value, label]) => (
-            <div key={label} className="bg-[#0b1017] p-5 sm:p-7">
-              <p className="text-xl font-medium tracking-tight">{value}</p>
-              <p className="mt-2 text-sm text-slate-500">{label}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section
-        id="about"
-        className="mx-auto grid max-w-6xl gap-10 border-t border-white/[0.07] px-6 py-24 md:grid-cols-2"
-      >
-        <div>
-          <p className="text-xs uppercase tracking-[0.2em] text-sky-400">
-            About
-          </p>
-          <h2 className="mt-5 max-w-lg text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
-            Curious about how things work. Focused on building things that do.
-          </h2>
-        </div>
-        <div className="space-y-5 text-base leading-8 text-slate-400">
-          <p>
-            I'm pursuing a B.E. in Computer Science at Sambhram Institute of
-            Technology, Bengaluru. I enjoy programming, solving problems, and
-            learning by building.
-          </p>
-          <p>
-            My current focus is strengthening Java and DSA while exploring
-            backend engineering, APIs, databases, and software design.
-          </p>
-          <p>
-            My goal is to become a strong software engineer and contribute to
-            useful products with a good team.
-          </p>
-        </div>
-      </section>
-
-      <section
-        id="projects"
-        className="mx-auto max-w-6xl border-t border-white/[0.07] px-6 py-24"
-      >
-        <div className="flex flex-wrap items-end justify-between gap-5">
+      {/* HERO */}
+      <div className="hero">
+        <div className="wrap">
           <div>
-            <p className="text-xs uppercase tracking-[0.2em] text-sky-400">
-              Selected work
+            <div className="badge"><i /> B.E. CSE • Bengaluru, India</div>
+            <h1>
+              Hi, I&apos;m Baliram<br />
+              <span className="l">I build software<br />that solves <span className="hl" style={{ fontWeight: 700 }}>real problems.</span></span>
+            </h1>
+            <p className="d">
+              Computer Science student passionate about backend development, APIs, databases and AI-powered applications. I love turning ideas into useful products and constantly learning new technologies.
             </p>
-            <h2 className="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">
-              Projects I've built.
-            </h2>
+            <div className="row">
+              <a className="btn pri" href="#projects">View My Projects <Arrow /></a>
+              <a className="btn sec" href={GITHUB} target="_blank" rel="noreferrer"><GitIcon s={20} /> GitHub <Ext /></a>
+            </div>
+            <div className="soc">
+              <a href={LINKEDIN} target="_blank" rel="noreferrer"><InIcon /> LinkedIn</a>
+              <a href={GITHUB} target="_blank" rel="noreferrer"><GitIcon /> GitHub</a>
+              <a href={`mailto:${EMAIL}`}><MailIcon /> Email</a>
+            </div>
           </div>
-          <a
-            href="https://github.com/baliram-ls"
-            target="_blank"
-            rel="noreferrer"
-            className="text-sm text-slate-400 transition hover:text-sky-400"
-          >
-            More on GitHub ↗
-          </a>
-        </div>
-
-        <div className="mt-10 grid gap-5 md:grid-cols-2">
-          {projects.map((project) => (
-            <article
-              key={project.name}
-              className="group rounded-3xl border border-white/[0.09] bg-[#0c1119] p-6 transition duration-300 hover:-translate-y-1 hover:border-sky-400/30 sm:p-8"
-            >
-              <div className="flex items-start justify-between gap-4">
-                <span className="text-xs uppercase tracking-[0.18em] text-slate-500">
-                  {project.number} / {project.category}
-                </span>
-                <span className="text-3xl font-semibold text-sky-400/80">
-                  {project.mark}
-                </span>
-              </div>
-              <h3 className="mt-8 text-2xl font-semibold tracking-tight">
-                {project.name}
-              </h3>
-              <p className="mt-3 min-h-20 leading-7 text-slate-400">
-                {project.description}
-              </p>
-              <div className="mt-6 flex flex-wrap gap-2">
-                {project.stack.map((tech) => (
-                  <span
-                    key={tech}
-                    className="rounded-full border border-white/[0.08] px-3 py-1.5 text-xs text-slate-300"
-                  >
-                    {tech}
-                  </span>
-                ))}
-              </div>
-              <div className="mt-8 flex flex-wrap gap-3 border-t border-white/[0.08] pt-6">
-                {"demo" in project && project.demo && (
-                  <a
-                    href={project.demo}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="rounded-full bg-sky-400 px-4 py-2.5 text-sm font-medium text-slate-950 hover:bg-sky-300"
-                  >
-                    Live demo ↗
-                  </a>
-                )}
-                <a
-                  href={project.github}
-                  target="_blank"
-                  rel="noreferrer"
-                  className={linkStyle}
-                >
-                  Source code ↗
-                </a>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section
-        id="skills"
-        className="mx-auto max-w-6xl border-t border-white/[0.07] px-6 py-24"
-      >
-        <p className="text-xs uppercase tracking-[0.2em] text-sky-400">
-          Tools & technologies
-        </p>
-        <h2 className="mt-4 text-3xl font-semibold tracking-tight">
-          What I'm learning and using.
-        </h2>
-        <div className="mt-8 flex flex-wrap gap-3">
-          {skills.map((skill) => (
-            <span
-              key={skill}
-              className="rounded-full border border-white/[0.09] bg-white/[0.02] px-4 py-3 text-sm text-slate-300 transition hover:border-sky-400/40"
-            >
-              {skill}
-            </span>
-          ))}
-        </div>
-      </section>
-
-      <section
-        id="contact"
-        className="mx-auto max-w-6xl border-t border-white/[0.07] px-6 py-24"
-      >
-        <div className="rounded-3xl border border-white/[0.09] bg-[#0d131c] p-7 sm:p-12">
-          <p className="text-xs uppercase tracking-[0.2em] text-sky-400">
-            Contact
-          </p>
-          <div className="mt-5 grid gap-8 md:grid-cols-2 md:items-end">
-            <div>
-              <h2 className="max-w-md text-3xl font-semibold tracking-tight sm:text-5xl">
-                Let's build something useful.
-              </h2>
-              <p className="mt-4 leading-7 text-slate-400">
-                Open to connecting with developers, collaborating on projects,
-                and exploring internship opportunities.
-              </p>
+          <div className="vis" aria-hidden="true">
+            <div className="frame">Good<br />Software<br />Better<br />People<u /></div>
+            <div className="laptop">
+              {Array.from({ length: 16 }).map((_, i) => <b key={i} />)}
             </div>
-            <div className="flex flex-col gap-3">
-              <a
-                href="mailto:suryawanshibaliram90@gmail.com"
-                className={linkStyle}
-              >
-                Email me <span className="ml-auto">↗</span>
-              </a>
-              <a
-                href="https://www.linkedin.com/in/baliram-suryawanshi-0b07a9338/"
-                target="_blank"
-                rel="noreferrer"
-                className={linkStyle}
-              >
-                LinkedIn <span className="ml-auto">↗</span>
-              </a>
-              <a
-                href="https://github.com/baliram-ls"
-                target="_blank"
-                rel="noreferrer"
-                className={linkStyle}
-              >
-                GitHub <span className="ml-auto">↗</span>
-              </a>
-            </div>
+            <div className="books"><div>Build</div><div>Learn</div><div>Improve</div><div>Repeat</div></div>
+          </div>
+        </div>
+      </div>
+
+      {/* STATS */}
+      <div className="wrap">
+        <div className="stats">
+          <div className="stat"><div className="ico"><Icon d="M2 9l10-5 10 5-10 5zM6 11v5c3 2.500 9 2.500 12 0v-5" /></div><div><b>5th Semester</b><small>B.E. CSE</small></div></div>
+          <div className="stat"><div className="ico"><Icon d="M8 7l-5 5 5 5M16 7l5 5-5 5M14 4l-4 16" /></div><div><b>2+</b><small>Projects</small></div></div>
+          <div className="stat"><div className="ico"><Icon d="M3 17l6-6 4 4 8-8M15 7h6v6" /></div><div><b>Always</b><small>Learning</small></div></div>
+          <div className="stat"><div className="ico"><Icon d="M12 21s7-6 7-11a7 7 0 10-14 0c0 5 7 11 7 11zM12 12a2 2 0 100-4 2 2 0 000 4z" /></div><div><b>Bengaluru</b><small>India</small></div></div>
+        </div>
+      </div>
+
+      {/* ABOUT */}
+      <section id="about">
+        <div className="wrap about">
+          <div>
+            <div className="eyebrow">About Me</div>
+            <h2>Turning curiosity<br />into <span className="hl">useful software.</span></h2>
+            <p>I&apos;m Baliram Suryawanshi, a <strong>Computer Science</strong> Engineering student at Sambhram Institute of Technology, Bengaluru. I enjoy solving programming problems and building real-world applications.</p>
+            <p>I&apos;m currently focused on Java, Data Structures &amp; Algorithms, backend development and exploring AI integrations.</p>
+            <a className="btn pri" href="/resume.pdf" download>Download Resume <Arrow /></a>
+          </div>
+          <div className="cards">
+            <div className="card"><div className="ci"><Icon d="M12 22a10 10 0 110-20 10 10 0 010 20zM12 18a6 6 0 110-12 6 6 0 010 12zM12 14a2 2 0 110-4 2 2 0 010 4z" /></div><h4>Interests</h4><p>Backend systems, APIs, databases, AI and Android development.</p></div>
+            <div className="card"><div className="ci"><Icon d="M3 5c3-1 6-1 9 1 3-2 6-2 9-1v14c-3-1-6-1-9 1-3-2-6-2-9-1zM12 6v14" /></div><h4>Currently Learning</h4><p>Advanced DSA, System Design, and building scalable backend projects.</p></div>
+            <div className="card"><div className="ci"><Icon d="M5 19c0-6 4-12 14-14 0 10-6 14-12 14zM9 15l-4 4M14 10a1 1 0 100-2 1 1 0 000 2z" /></div><h4>Goal</h4><p>To work at a product based company and contribute to impactful products.</p></div>
+            <div className="card"><div className="ci"><Icon d="M9 11a3.500 3.500 0 100-7 3.500 3.500 0 000 7zM2 21c0-4 3-6 7-6s7 2 7 6M16 4a3.500 3.500 0 010 7M18 15c2.500.7 4 2.500 4 6" /></div><h4>Open To</h4><p>Internships, collaborations and opportunities to learn from experienced engineers.</p></div>
           </div>
         </div>
       </section>
 
-      <footer className="border-t border-white/[0.07]">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-7 text-sm text-slate-500">
-          <a href="#home" className="font-semibold text-white">
-            baliram<span className="text-sky-400">.</span>
-          </a>
-          <span>© {new Date().getFullYear()} Baliram Suryawanshi</span>
-          <a href="#home" className="transition hover:text-white">
-            Back to top ↑
-          </a>
-        </div>
-      </footer>
-    </main>
-  );
-}
+      {/* PROJECTS */}
+      <section id="projects">
+        <div className="wrap">
+          <div className="ph">
+            <div className="eyebrow" style={{ margin: 0 }}>Featured Projects</div>
+            <a href={GITHUB} target="_blank" rel="noreferrer">View all projects <Arrow /></a>
+          </div>
+          <div className="proj">
+            <div className="pc">
+              <div>
+                <div className="tag"><span>01</span> AI · LEGALTECH</div>
+                <h3>LegalMate AI</h3>
+                <p>An AI-powered legal information assistant that helps users explore legal topics through a conversational interface.</p>
+                <div className="chips"><span>Python</span><span>Flask</span><span>Groq API</span><span>JavaScript</span></div>
+                <div className="row">
+                  <a className="btn pri" href="#" target="_blank" rel="noreferrer">Live Demo <Ext /></a>
+                  <a className="btn sec" href={GITHUB} target="_blank" rel="noreferrer">GitHub <Ext /></a>
+                </div>
+              </div>
+              <div className="shot">
+                <h5>LegalMate <span className="hl">AI</span></h5>
+                <div className="hl">Your AI Legal Assistant</div>
+                <div>Get clear answers to your legal questions in simple language.</div>
+                <div className="in">Ask a legal question...<i /></div>
+                <div className="g"><div>Property Law<br />Property disputes, registration, etc.</div><div>Consumer Rights<br />Consumer protection, refunds, etc.</div></div>
+              </div>
+            </div>
+            <div className="pc">
+              <div>
+                <div className="tag"><span>02</span> ANDROID · PRODUCTIVITY</div>
+                <h3>AttendLock</h3>
+                <p>An attendance tracking application designed to help students manage their attendance and understand their class status.</p>
+                <div className="chips"><span>Java</span><span>Android</span><span>XML</span></div>
+                <div className="row">
+                  <a className="btn sec" href={GITHUB} target="_blank" rel="noreferrer">GitHub <Ext /></a>
+                </div>
+              </div>
+              <div className="phone">
