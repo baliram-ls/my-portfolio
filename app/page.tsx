@@ -1,247 +1,291 @@
-"use client";
+import type { Metadata } from "next";
+import Image from "next/image";
+import { Inter_Tight, JetBrains_Mono } from "next/font/google";
+import Nav from "./Nav";
+import "./portfolio.css";
 
-import { useState } from "react";
-import { Inter_Tight } from "next/font/google";
+const sans = Inter_Tight({ subsets: ["latin"], weight: ["400", "500", "600"] });
+const mono = JetBrains_Mono({ subsets: ["latin"], weight: ["400"], variable: "--mono" });
 
-const font = Inter_Tight({ subsets: ["latin"], weight: ["400", "500", "600"] });
+export const metadata: Metadata = {
+  title: "Baliram Suryawanshi | Backend and Java Developer",
+  description:
+    "Portfolio of Baliram Suryawanshi, a Computer Science Engineering student in Bengaluru building backend systems, APIs and Android apps. Projects: LegalMate AI and AttendLock.",
+};
 
 const LINKEDIN = "https://www.linkedin.com/in/baliram-suryawanshi-0b07a9338/";
 const GITHUB = "https://github.com/baliram-ls";
 const EMAIL = "suryawanshibaliram90@gmail.com";
+const RESUME = "/resume.pdf"; // put your real PDF at public/resume.pdf, or delete the resume line in About
+
+function Ext({ href, children, className }: { href: string; children: React.ReactNode; className?: string }) {
+  return (
+    <a className={className} href={href} target="_blank" rel="noopener noreferrer">
+      {children}
+      <span className="sr"> (opens in a new tab)</span>
+    </a>
+  );
+}
+
+/* Hero code visual. Tokens: [className, text]. Replace with a real snippet from your repo when you can. */
+type Tok = [string, string];
+const code: Tok[][] = [
+  [["k", "from"], ["", " flask "], ["k", "import"], ["", " Flask, jsonify, request"]],
+  [],
+  [["", "app = "], ["f", "Flask"], ["", "(__name__)"]],
+  [],
+  [["f", '@app.post'], ["", "("], ["s", '"/api/ask"'], ["", ")"]],
+  [["k", "def"], ["", " "], ["f", "ask"], ["", "():"]],
+  [["", "    data = request.get_json(silent="], ["k", "True"], ["", ") "], ["k", "or"], ["", " {}"]],
+  [["", "    question = (data.get("], ["s", '"question"'], ["", ") "], ["k", "or"], ["", " "], ["s", '""'], ["", ").strip()"]],
+  [],
+  [["", "    "], ["k", "if not"], ["", " question:"]],
+  [["", "        "], ["k", "return"], ["", " jsonify(error="], ["s", '"question is required"'], ["", "), 400"]],
+  [],
+  [["", "    answer = "], ["f", "get_answer"], ["", "(question)"]],
+  [["", "    "], ["k", "return"], ["", " jsonify(answer=answer), 200"]],
+];
 
 type Project = {
   name: string;
-  type: string;
-  desc: string;
-  stack: string;
-  image?: string; // add a screenshot path like "/legalmate.png" (put the file in /public)
+  category: string;
+  problem: string;
+  features: string[];
+  stack: string[];
   links: { label: string; href: string }[];
+  frame: "browser" | "phone";
+  url?: string;
+  image?: { src: string; width: number; height: number; alt: string }; // add screenshot files to /public
 };
 
 const projects: Project[] = [
   {
     name: "LegalMate AI",
-    type: "Web app",
-    desc: "A legal information assistant. You ask a question in plain language and get an answer on topics such as property law and consumer rights.",
-    stack: "Python, Flask, Groq API, JavaScript",
-    image: "",
+    category: "Web application, AI assistant",
+    problem:
+      "Legal information is hard to read if you are not a lawyer. LegalMate lets you ask a question in plain language and get an answer written for a general reader.",
+    features: [
+      "Conversational question and answer on legal topics",
+      "Shortcuts for common areas such as property law and consumer rights",
+      "Answers generated through the Groq API from a Flask backend",
+    ],
+    stack: ["Python", "Flask", "Groq API", "JavaScript"],
     links: [
       { label: "Live demo", href: "https://legalmate-ai-deploy.vercel.app/" },
       { label: "Source code", href: "https://github.com/baliram-ls/legalmate-ai" },
     ],
+    frame: "browser",
+    url: "legalmate-ai-deploy.vercel.app",
+    image: undefined, // e.g. { src: "/legalmate.png", width: 1440, height: 900, alt: "LegalMate AI home screen" }
   },
   {
     name: "AttendLock",
-    type: "Android app",
-    desc: "An attendance tracker for students. It shows your timetable, your attendance percentage, and how many classes you can miss in each subject.",
-    stack: "Java, Android, XML",
-    image: "",
+    category: "Android application",
+    problem:
+      "Students lose track of attendance until it is too late. AttendLock keeps the timetable and attendance in one place so you can see where you stand in each subject.",
+    features: [
+      "Timetable for the week",
+      "Attendance percentage tracking",
+      "Per-subject attendance view",
+    ],
+    stack: ["Java", "Android", "XML"],
     links: [{ label: "Source code", href: "https://github.com/baliram-ls/attendlock" }],
+    frame: "phone",
+    image: undefined, // e.g. { src: "/attendlock.png", width: 540, height: 1170, alt: "AttendLock attendance screen" }
   },
 ];
 
 const skills = [
-  { group: "Languages", items: "Java, Python, C, JavaScript, SQL, HTML, CSS" },
-  { group: "Backend", items: "Flask, REST APIs, SQL databases" },
-  { group: "Frontend and mobile", items: "Next.js, Android (Java and XML)" },
+  { group: "Programming", items: "Python, C, JavaScript" },
+  { group: "Backend", items: "Flask, REST APIs, SQL and database fundamentals" },
+  { group: "Web", items: "HTML, CSS, JavaScript, Next.js" },
+  { group: "Android", items: "Java and XML" },
   { group: "Tools", items: "Git, GitHub, VS Code" },
 ];
 
-const css = `
-*{box-sizing:border-box;margin:0;padding:0}
-.pf{--bg:#efefec;--ink:#111;--mut:#5d5d58;--rule:#cdcdc7;background:var(--bg);color:var(--ink);min-height:100vh;overflow-x:hidden;line-height:1.5;-webkit-font-smoothing:antialiased}
-.pf a{color:inherit;text-decoration:none}
-.pf a:focus-visible,.pf button:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
-.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
-.ul{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}
-.ul:hover{text-decoration-thickness:2px}
-.small{font-size:13px;color:var(--mut)}
+const used = [
+  ["Flask", "Backend for LegalMate AI"],
+  ["Groq API integration", "Calling an external AI API from the server in LegalMate AI"],
+  ["Java and XML on Android", "Screens and logic in AttendLock"],
+  ["Git and GitHub", "Version control for both projects"],
+];
 
-.nav{display:flex;align-items:center;justify-content:space-between;height:60px;font-size:14px}
-.nav .name{font-weight:600;font-size:16px;letter-spacing:-.01em}
-.nav ul{display:flex;gap:30px;list-style:none}
-.nav ul a:hover,.nav .ml:hover{text-decoration:underline;text-underline-offset:4px}
-.burger{display:none;background:none;border:0;font:inherit;font-size:14px;cursor:pointer;color:var(--ink)}
-.mnav{display:none}
-
-.hero{padding:56px 0 64px}
-.hero .meta{font-size:13px;color:var(--mut);margin-bottom:28px}
-.hero h1{font-size:clamp(40px,7.4vw,98px);line-height:1.02;font-weight:500;letter-spacing:-.045em;max-width:1000px}
-.hero-bottom{display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:72px;align-items:end}
-.hero-bottom p{font-size:15px;max-width:380px;margin-bottom:22px}
-.btn{display:inline-block;background:var(--ink);color:#fff!important;font-size:13px;font-weight:500;padding:12px 18px;border-radius:0}
-.btn:hover{background:#333}
-.latest .lh{display:flex;justify-content:space-between;font-size:12px;color:var(--mut);margin-bottom:8px}
-.latest a{display:flex;justify-content:space-between;padding:12px 0;border-top:1px solid var(--rule);font-size:14px}
-.latest a:last-child{border-bottom:1px solid var(--rule)}
-.latest a:hover span:first-child{text-decoration:underline;text-underline-offset:4px}
-.latest span:last-child{color:var(--mut)}
-
-section{padding:72px 0 0;scroll-margin-top:20px}
-.sh{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--ink);padding-top:14px;margin-bottom:8px}
-.sh h2{font-size:14px;font-weight:600}
-
-.prow{display:grid;grid-template-columns:1fr 1.5fr 160px;gap:32px;padding:28px 0;border-bottom:1px solid var(--rule)}
-.prow h3{font-size:30px;font-weight:500;letter-spacing:-.03em;line-height:1.1}
-.prow .type{margin-top:6px}
-.prow p{font-size:15px;max-width:520px;margin-bottom:12px}
-.prow .stack{font-size:13px;color:var(--mut)}
-.prow .links{display:flex;flex-direction:column;gap:6px;font-size:14px;align-items:flex-start}
-.shot{grid-column:1/-1;width:100%;aspect-ratio:16/9;object-fit:cover;background:#dcdcd6;display:block}
-
-.about{display:grid;grid-template-columns:1fr 1.5fr;gap:32px;padding:28px 0}
-.about p{font-size:20px;line-height:1.4;letter-spacing:-.015em;max-width:640px;margin-bottom:18px}
-.facts{display:grid;grid-template-columns:170px 1fr;gap:10px 20px;font-size:15px;margin-top:28px}
-.facts dt{color:var(--mut)}
-
-.skrow{display:grid;grid-template-columns:1fr 1.5fr;gap:32px;padding:14px 0;border-bottom:1px solid var(--rule);font-size:15px}
-.skrow span:first-child{color:var(--mut)}
-
-.contact{padding:28px 0 0}
-.contact .big{display:inline-block;font-size:clamp(24px,4.6vw,60px);font-weight:500;letter-spacing:-.035em;line-height:1.1;word-break:break-all}
-.contact .others{display:flex;gap:28px;margin-top:22px;font-size:15px}
-.contact p{max-width:480px;margin:0 0 20px;font-size:15px}
-
-footer{margin-top:96px;border-top:1px solid var(--rule);padding:20px 0 28px}
-footer .wrap{display:flex;justify-content:space-between;font-size:13px;color:var(--mut)}
-
-@media(max-width:820px){
-.hero-bottom,.about,.skrow{grid-template-columns:1fr}
-.hero-bottom{margin-top:48px;gap:36px}
-.prow{grid-template-columns:1fr;gap:12px}
-.prow .links{flex-direction:row;gap:20px;margin-top:4px}
-}
-@media(max-width:720px){
-.wrap{padding:0 20px}
-.nav ul,.nav .ml{display:none}
-.burger{display:block}
-.mnav.open{display:flex;flex-direction:column;border-top:1px solid var(--rule)}
-.mnav a{padding:14px 0;border-bottom:1px solid var(--rule);font-size:15px}
-.hero{padding:36px 0 48px}
-.facts{grid-template-columns:1fr;gap:2px}
-.facts dd{margin-bottom:12px}
-.about p{font-size:18px}
-}
-@media(prefers-reduced-motion:reduce){*{transition:none!important}}
-`;
+const learning = [
+  ["REST API design", "Resources, status codes, consistent responses"],
+  ["Databases and SQL", "Schema design, joins, indexes"],
+  ["Authentication and authorization", "Sessions, tokens, roles"],
+  ["Validation and error handling", "Rejecting bad input with clear errors"],
+  ["Testing and debugging", "Unit tests and reading stack traces properly"],
+  ["Performance and scalability", "Caching, query cost, basic system design"],
+];
 
 export default function Page() {
-  const [open, setOpen] = useState(false);
-  const nav = ["Projects", "About", "Skills", "Contact"];
-
   return (
-    <div className={`pf ${font.className}`} id="top">
-      <style>{css}</style>
+    <div className={`pf ${sans.className} ${mono.variable}`} id="top">
+      <Nav />
 
-      <div className="wrap">
-        <header>
-          <div className="nav">
-            <a className="name" href="#top">Baliram Suryawanshi</a>
-            <ul>
-              {nav.map((n) => (
-                <li key={n}><a href={`#${n.toLowerCase()}`}>{n}</a></li>
-              ))}
-            </ul>
-            <a className="ml ul" href={`mailto:${EMAIL}`}>Email me</a>
-            <button className="burger" aria-expanded={open} onClick={() => setOpen(!open)}>
-              {open ? "Close" : "Menu"}
-            </button>
-          </div>
-          <div className={`mnav ${open ? "open" : ""}`}>
-            {nav.map((n) => (
-              <a key={n} href={`#${n.toLowerCase()}`} onClick={() => setOpen(false)}>{n}</a>
-            ))}
-          </div>
-        </header>
+      <main>
+        <div className="wrap">
+          <div className="hero">
+            <div className="hero-grid">
+              <div>
+                <p className="status">B.E. Computer Science, 5th semester, Sambhram Institute of Technology, Bengaluru</p>
+                <h1>Building backend systems, APIs, and software that solves real problems.</h1>
+                <p className="lead">
+                  I am a CSE student who writes mostly Java and is learning backend engineering. I build practical applications, and I am looking for a software engineering internship.
+                </p>
+                <div className="cta">
+                  <a className="btn pri" href="#projects">View My Projects</a>
+                  <Ext className="btn" href={GITHUB}>GitHub</Ext>
+                </div>
+                <div className="quick">
+                  <Ext className="ul" href={LINKEDIN}>LinkedIn</Ext>
+                  <Ext className="ul" href={GITHUB}>GitHub profile</Ext>
+                  <a className="ul" href={`mailto:${EMAIL}`}>{EMAIL}</a>
+                </div>
+              </div>
 
-        <div className="hero">
-          <div className="meta">(B.E. Computer Science, 5th semester, Bengaluru)</div>
-          <h1>I build backend services, APIs and Android apps that people use.</h1>
-
-          <div className="hero-bottom">
-            <div>
-              <p>
-                I study at Sambhram Institute of Technology. I work in Python, Flask and Java, and I am looking for an internship where I can ship backend code.
-              </p>
-              <a className="btn" href="#projects">See projects</a>
-            </div>
-            <div className="latest">
-              <div className="lh"><span>Projects</span><span>2</span></div>
-              {projects.map((p) => (
-                <a key={p.name} href="#projects">
-                  <span>{p.name}</span>
-                  <span>{p.type}</span>
-                </a>
-              ))}
+              <div>
+                <div className="editor" role="img" aria-label="Example Flask endpoint that validates input and returns JSON">
+                  <div className="editor-top"><span>example_route.py</span><span>Python</span></div>
+                  <pre aria-hidden="true">
+                    <code>
+                      {code.map((line, i) => (
+                        <span className="ln" data-n={i + 1} key={i}>
+                          {line.length === 0 ? " " : line.map(([c, t], j) => (c ? <span className={c} key={j}>{t}</span> : t))}
+                        </span>
+                      ))}
+                    </code>
+                  </pre>
+                </div>
+                <p className="cap">An example Flask endpoint with input validation.</p>
+              </div>
             </div>
           </div>
         </div>
 
-        <section id="projects">
-          <div className="sh"><h2>Projects</h2></div>
-          {projects.map((p) => (
-            <article className="prow" key={p.name}>
-              <div>
-                <h3>{p.name}</h3>
-                <div className="type small">{p.type}</div>
-              </div>
-              <div>
-                <p>{p.desc}</p>
-                <div className="stack">{p.stack}</div>
-              </div>
-              <div className="links">
-                {p.links.map((l) => (
-                  <a key={l.label} className="ul" href={l.href} target="_blank" rel="noreferrer">{l.label}</a>
-                ))}
-              </div>
-              {p.image ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img className="shot" src={p.image} alt={`${p.name} screenshot`} />
-              ) : null}
-            </article>
-          ))}
-        </section>
-
         <section id="about">
-          <div className="sh"><h2>About</h2></div>
-          <div className="about">
-            <div />
-            <div>
-              <p>
-                I am a Computer Science student focused on Java, data structures and algorithms, and backend development. I like building tools that fix a problem I have run into myself, such as tracking attendance.
-              </p>
+          <div className="wrap">
+            <div className="sh"><h2>About</h2></div>
+            <div className="about">
+              <div>
+                <p>
+                  I am <strong>Baliram</strong>, a fifth-semester Computer Science student in Bengaluru. Java is the language I know best, and most of my coursework and practice, including data structures and algorithms, is in it.
+                </p>
+                <p>
+                  I like building software because you can start with something that annoys you, like losing track of attendance, and end up with something that works. That is how AttendLock started.
+                </p>
+                <p>
+                  I want to work on the backend: APIs, databases and the logic behind an application. Right now I am learning API design, SQL and testing properly. My goal is an internship, and later a backend role at a product company.
+                </p>
+              </div>
               <dl className="facts">
                 <dt>Education</dt><dd>B.E. CSE, Sambhram Institute of Technology</dd>
-                <dt>Currently learning</dt><dd>Advanced DSA and system design</dd>
-                <dt>Looking for</dt><dd>Internships and project collaboration</dd>
-                <dt>Resume</dt><dd><a className="ul" href="/resume.pdf" download>Download PDF</a></dd>
+                <dt>Semester</dt><dd>5th</dd>
+                <dt>Main language</dt><dd>Java</dd>
+                <dt>Looking for</dt><dd>Software engineering internship</dd>
+                <dt>Resume</dt><dd><a className="ul" href={RESUME} download>Download PDF</a></dd>
               </dl>
             </div>
           </div>
         </section>
 
-        <section id="skills">
-          <div className="sh"><h2>Skills</h2></div>
-          {skills.map((s) => (
-            <div className="skrow" key={s.group}>
-              <span>{s.group}</span>
-              <span>{s.items}</span>
+        <section id="projects">
+          <div className="wrap">
+            <div className="sh">
+              <h2>Projects</h2>
+              <p>Two projects I built and maintain on GitHub.</p>
             </div>
-          ))}
+            {projects.map((p, i) => (
+              <article className={`proj ${i % 2 ? "flip" : ""} ${p.image ? "" : "noimg"}`} key={p.name}>
+                <div>
+                  <h3>{p.name}</h3>
+                  <p className="cat">{p.category}</p>
+                  <p>{p.problem}</p>
+                  <ul>{p.features.map((f) => <li key={f}>{f}</li>)}</ul>
+                  <div className="stack" aria-label="Technologies used">
+                    {p.stack.map((s) => <span key={s}>{s}</span>)}
+                  </div>
+                  <div className="cta">
+                    {p.links.map((l, k) => (
+                      <Ext key={l.label} className={`btn ${k === 0 && p.links.length > 1 ? "pri" : ""}`} href={l.href}>{l.label}</Ext>
+                    ))}
+                  </div>
+                </div>
+                {p.image ? (
+                  <div className="media">
+                    <div className={`frame ${p.frame === "phone" ? "phone" : ""}`}>
+                      {p.frame === "browser" && p.url ? <div className="url">{p.url}</div> : null}
+                      <Image
+                        src={p.image.src}
+                        width={p.image.width}
+                        height={p.image.height}
+                        alt={p.image.alt}
+                        sizes="(max-width: 900px) 100vw, 640px"
+                      />
+                    </div>
+                  </div>
+                ) : null}
+              </article>
+            ))}
+          </div>
         </section>
 
-        <section id="contact">
-          <div className="sh"><h2>Contact</h2></div>
-          <div className="contact">
-            <p>Email is the fastest way to reach me.</p>
-            <a className="big ul" href={`mailto:${EMAIL}`}>{EMAIL}</a>
-            <div className="others">
-              <a className="ul" href={LINKEDIN} target="_blank" rel="noreferrer">LinkedIn</a>
-              <a className="ul" href={GITHUB} target="_blank" rel="noreferrer">GitHub</a>
+        <section id="skills">
+          <div className="wrap">
+            <div className="sh"><h2>Skills</h2></div>
+            <div className="skills">
+              <div className="lead-skill">
+                <h3>Java</h3>
+                <p>My strongest language. I use it for Android development in AttendLock and for data structures and algorithms practice. Backend fundamentals are what I am building on top of it.</p>
+              </div>
+              <dl>
+                {skills.map((s) => (
+                  <div className="skrow" key={s.group}>
+                    <dt>{s.group}</dt>
+                    <dd>{s.items}</dd>
+                  </div>
+                ))}
+              </dl>
             </div>
           </div>
         </section>
-      </div>
+
+        <section id="backend">
+          <div className="wrap">
+            <div className="sh">
+              <h2>Backend focus</h2>
+              <p>What I have used in projects, and what I am still learning. None of this has run in production.</p>
+            </div>
+            <div className="focus">
+              <div className="col">
+                <h3>Used in my projects</h3>
+                <p>Visible in the repositories.</p>
+                <ul>{used.map(([t, d]) => <li key={t}>{t}<span>{d}</span></li>)}</ul>
+              </div>
+              <div className="col">
+                <h3>Currently learning</h3>
+                <p>Not yet built into a project.</p>
+                <ul>{learning.map(([t, d]) => <li key={t}>{t}<span>{d}</span></li>)}</ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="contact">
+          <div className="wrap">
+            <div className="contact">
+              <div className="sh" style={{ marginBottom: 0 }}><h2>Contact</h2></div>
+              <p>I am looking for an internship, and I am happy to talk about collaborations or small software projects. Email is the fastest way to reach me.</p>
+              <a className="mail ul" href={`mailto:${EMAIL}`}>{EMAIL}</a>
+              <div className="row">
+                <Ext className="btn" href={LINKEDIN}>LinkedIn</Ext>
+                <Ext className="btn" href={GITHUB}>GitHub</Ext>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
 
       <footer>
         <div className="wrap">
